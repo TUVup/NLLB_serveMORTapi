@@ -9,7 +9,7 @@ nllb-serve가 MORT와 호환 가능하게 app.py를 수정했습니다.
 
 # NLLB 모델 교체
 nllb-serve는 기본적으로 nllb-200-distilled-600M을 불러옵니다. 더 나은 번역을 위해 1.3B모델로 교체하여 사용하는걸 권장드립니다.
-1. app.py의 \#26 DEF-MODEL-ID 변수를 "facebook/nllb-200-1.3B"로 변경하면 1.3B를 기본으로 로드합니다.
+1. app.py의 \#DEF-MODEL-ID 변수의 주석을 제거하면 "facebook/nllb-200-1.3B"를 기본으로 로드합니다.
 
 또는
 
