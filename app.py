@@ -124,20 +124,25 @@ def attach_translate_route(
         if request.method == 'POST':
             if request.headers.get('Content-Type') == 'application/json':
                 args = request.json
-                src_lang = args.get('src_lang') or def_src_lang
-                tgt_lang = args.get('tgt_lang') or def_tgt_lang
-                if hasattr(args, 'getlist') :
-                    sources = args.getlist("source")
-                else:
-                    sources = args.get("source")
-                    if isinstance(sources, str):
-                        sources = [sources]
                 if args.get("text"):
-                    json = request.get_json()
-                    sources = json["text"]
-                    src_lang = json["source"] or def_src_lang
-                    tgt_lang = json["target"] or def_tgt_lang
+                    src_lang = args["source"] or def_src_lang
+                    tgt_lang = args["target"] or def_tgt_lang
+                    if hasattr(args, 'getlist') :
+                        sources = args.getlist("text")
+                    else:
+                        sources = args.get("text")
+                        if isinstance(sources, str):
+                            sources = [sources]
                     mort = 1
+                else:
+                    src_lang = args.get('src_lang') or def_src_lang
+                    tgt_lang = args.get('tgt_lang') or def_tgt_lang
+                    if hasattr(args, 'getlist') :
+                        sources = args.getlist("source")
+                    else:
+                        sources = args.get("source")
+                        if isinstance(sources, str):
+                            sources = [sources]
             else:
                 args = request.form
                 src_lang = args.get('src_lang') or def_src_lang
@@ -153,7 +158,7 @@ def attach_translate_route(
 
         if not sources:
             return "Please submit 'source' parameter", 400
-        max_length = 80
+        max_length = 100000
         inputs = tokenizer(sources, return_tensors="pt", padding=True)
         inputs = {k:v.to(device) for k, v in inputs.items()}
 
@@ -161,25 +166,25 @@ def attach_translate_route(
             **inputs, forced_bos_token_id=tokenizer.lang_code_to_id[tgt_lang],
             max_length = max_length)
         output = tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)
-        result = []
-        for i in output:
-            result.append(i)
-        
-        out = ''.join(str(s) for s in result)
-
-        res = dict(source=sources, translation=output,
-                   src_lang = src_lang, tgt_lang=tgt_lang,
-                   time_taken = round(time.time() - st, 3), time_units='s')
 
         if mort == 0:
+            res = dict(source=sources, translation=output,
+                   src_lang = src_lang, tgt_lang=tgt_lang,
+                   time_taken = round(time.time() - st, 3), time_units='s')
             return flask.jsonify(jsonify(res))
-        return jsonify(
-            {
-                "result": out,
-                "errorMessage" : "",
-                "errorCode" : "0"
-            }
-        )
+        else:
+            result = []
+            for i in output:
+                result.append(i)
+        
+            out = ''.join(str(s) for s in result)
+            return jsonify(
+                {
+                    "result": out,
+                    "errorMessage" : "",
+                    "errorCode" : "0"
+                }
+            )
 
     @bp.route('/about')
     def about():
