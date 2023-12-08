@@ -23,7 +23,7 @@ device = torch.device(torch.cuda.is_available() and 'cuda' or 'cpu')
 log.info(f'torch device={device}')
 
 
-DEF_MODEL_ID = "facebook/nllb-200-1.3B"
+#DEF_MODEL_ID = "facebook/nllb-200-1.3B"
 DEF_SRC_LNG = 'eng_Latn'
 DEF_TGT_LNG = 'kor_Hang'
 FLOAT_POINTS = 4
