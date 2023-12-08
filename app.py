@@ -198,7 +198,7 @@ def parse_args():
     parser.add_argument("-b", "--base", help="Base prefix path for all the URLs. E.g., /v1")
     parser.add_argument("-mi", "--model_id", type=str, default=DEF_MODEL_ID,
                         help="model ID; see https://huggingface.co/models?other=nllb")
-    parser.add_argument("-msl", "--max-src-len", type=int, default=5000,
+    parser.add_argument("-msl", "--max-src-len", type=int, default=250,
                         help="max source len; longer seqs will be truncated")
     args = vars(parser.parse_args())
     return args
