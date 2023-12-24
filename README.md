@@ -19,6 +19,6 @@ nllb-serve -mi facebook/nllb-200-1.3B
 ```
 
 ---
-●[MORT](https://blog.naver.com/killkimno/223152420480)
+●[MORT](https://blog.naver.com/killkimno/70179867557)
 
 ●[nllb-serve](https://github.com/thammegowda/nllb-serve)
