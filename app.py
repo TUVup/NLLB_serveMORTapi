@@ -24,6 +24,7 @@ log.info(f'torch device={device}')
 
 
 #DEF_MODEL_ID = "facebook/nllb-200-1.3B"
+DEF_MODEL_ID = "facebook/nllb-200-distilled-1.3B"
 DEF_SRC_LNG = 'eng_Latn'
 DEF_TGT_LNG = 'kor_Hang'
 FLOAT_POINTS = 4
@@ -158,7 +159,7 @@ def attach_translate_route(
 
         if not sources:
             return "Please submit 'source' parameter", 400
-        max_length = 100000
+        max_length = 1024
         inputs = tokenizer(sources, return_tensors="pt", padding=True)
         inputs = {k:v.to(device) for k, v in inputs.items()}
 
@@ -203,7 +204,7 @@ def parse_args():
     parser.add_argument("-b", "--base", help="Base prefix path for all the URLs. E.g., /v1")
     parser.add_argument("-mi", "--model_id", type=str, default=DEF_MODEL_ID,
                         help="model ID; see https://huggingface.co/models?other=nllb")
-    parser.add_argument("-msl", "--max-src-len", type=int, default=250,
+    parser.add_argument("-msl", "--max-src-len", type=int, default=1024,
                         help="max source len; longer seqs will be truncated")
     args = vars(parser.parse_args())
     return args
